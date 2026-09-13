@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#04773e"/>
+  <text x="210" y="340" text-anchor="middle" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="300" font-weight="800" fill="#ffffff">S</text>
+  <!-- speech bubble with sound waves -->
+  <g transform="translate(320, 300)">
+    <path d="M0 0h110a36 36 0 0 1 36 36v54a36 36 0 0 1-36 36H58l-34 28v-28H0A36 36 0 0 1-36 90V36A36 36 0 0 1 0 0z" fill="#ffffff"/>
+    <path d="M28 52c8 10 8 28 0 38" fill="none" stroke="#04773e" stroke-width="10" stroke-linecap="round"/>
+    <path d="M50 40c14 16 14 46 0 62" fill="none" stroke="#04773e" stroke-width="10" stroke-linecap="round"/>
+    <path d="M72 28c20 22 20 64 0 86" fill="none" stroke="#04773e" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>

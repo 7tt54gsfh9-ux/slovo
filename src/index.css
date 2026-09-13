@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --color-slovo-green: #22c55e;
+  --color-slovo-green-dark: #16a34a;
+  --color-slovo-green-light: #86efac;
+  --color-slovo-sky: #0ea5e9;
+  --color-slovo-gold: #f59e0b;
+  --color-slovo-red: #ef4444;
+  --color-slovo-heart: #f43f5e;
+  --font-sans: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #0f172a;
+  color: #f8fafc;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+@keyframes confetti {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-120px) rotate(360deg); opacity: 0; }
+}
+
+.animate-bounce-in { animation: bounce-in 0.4s ease-out; }
+.animate-shake { animation: shake 0.4s ease-in-out; }
+
+@keyframes mic-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  70% { transform: scale(1.55); opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+.mic-pulse {
+  animation: mic-pulse 1.4s ease-out infinite;
+}
+.mic-pulse-delay {
+  animation: mic-pulse 1.4s ease-out infinite;
+  animation-delay: 0.45s;
+}
