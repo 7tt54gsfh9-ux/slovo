@@ -1,0 +1,48 @@
+/** Extra Slovak↔English pairs for practice games (additive; does not change lesson IDs). */
+export interface VocabPair {
+  sk: string
+  en: string
+}
+
+export const GAMES_VOCAB_BANK: VocabPair[] = [
+  { sk: 'Ahoj', en: 'Hello / Hi' },
+  { sk: 'Ďakujem', en: 'Thank you' },
+  { sk: 'Prosím', en: 'Please / You\'re welcome' },
+  { sk: 'Áno', en: 'Yes' },
+  { sk: 'Nie', en: 'No' },
+  { sk: 'Dovidenia', en: 'Goodbye' },
+  { sk: 'Dobré ráno', en: 'Good morning' },
+  { sk: 'Dobrý deň', en: 'Good day' },
+  { sk: 'Dobrý večer', en: 'Good evening' },
+  { sk: 'Prepáčte', en: 'Excuse me / Sorry' },
+  { sk: 'Voda', en: 'Water' },
+  { sk: 'Káva', en: 'Coffee' },
+  { sk: 'Čaj', en: 'Tea' },
+  { sk: 'Pivo', en: 'Beer' },
+  { sk: 'Chlieb', en: 'Bread' },
+  { sk: 'Syr', en: 'Cheese' },
+  { sk: 'Mama', en: 'Mom / Mother' },
+  { sk: 'Otec', en: 'Father' },
+  { sk: 'Brat', en: 'Brother' },
+  { sk: 'Sestra', en: 'Sister' },
+  { sk: 'Rodina', en: 'Family' },
+  { sk: 'Priateľ', en: 'Friend' },
+  { sk: 'Jeden', en: 'One' },
+  { sk: 'Dva', en: 'Two' },
+  { sk: 'Tri', en: 'Three' },
+  { sk: 'Päť', en: 'Five' },
+  { sk: 'Desať', en: 'Ten' },
+  { sk: 'Modrý', en: 'Blue' },
+  { sk: 'Červený', en: 'Red' },
+  { sk: 'Veľký', en: 'Big' },
+  { sk: 'Malý', en: 'Small' },
+  { sk: 'Krásny', en: 'Beautiful' },
+  { sk: 'Horúci', en: 'Hot' },
+  { sk: 'Dobre', en: 'Fine / OK / Well' },
+  { sk: 'Výborne', en: 'Excellent' },
+  { sk: 'Pomaly', en: 'Slowly' },
+  { sk: 'Rozumiem', en: 'I understand' },
+  { sk: 'Nerozumiem', en: 'I don\'t understand' },
+  { sk: 'Neviem', en: 'I don\'t know' },
+  { sk: 'Chcem', en: 'I want' },
+]
