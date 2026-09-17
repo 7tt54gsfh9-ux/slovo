@@ -4,7 +4,7 @@ import { getGameVocab, pickN, shuffle, type VocabPair } from '../../../lib/gameV
 import { SpeakButton } from '../../ui/SpeakButton'
 import { GameResult } from '../GameResult'
 
-const ROUND_SIZE = 8
+const ROUND_SIZE = 10
 const LIVES = 3
 
 interface Props {

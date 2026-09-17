@@ -10,7 +10,20 @@ import {
 import { speakSlovak, warmVoices } from '../../../lib/speak'
 import { GameResult } from '../GameResult'
 
-const ROUND_SIZE = 10
+type RoundMode = 'quick' | 'standard' | 'long'
+
+const ROUND_SIZES: Record<RoundMode, number> = {
+  quick: 8,
+  standard: 12,
+  long: 15,
+}
+
+const MODE_LABELS: Record<RoundMode, string> = {
+  quick: 'Quick · 8',
+  standard: 'Standard · 12',
+  long: 'Long · 15',
+}
+
 const LIVES = 3
 
 interface Props {
@@ -23,6 +36,8 @@ export function TapWhatYouHear({ onExit }: Props) {
 
   const pool = useMemo(() => getGameVocab(completedLessons), [completedLessons])
 
+  const [mode, setMode] = useState<RoundMode>('standard')
+  const [started, setStarted] = useState(false)
   const [items, setItems] = useState<VocabPair[]>([])
   const [index, setIndex] = useState(0)
   const [score, setScore] = useState(0)
@@ -37,33 +52,33 @@ export function TapWhatYouHear({ onExit }: Props) {
     warmVoices()
   }, [])
 
-  const startRound = useCallback(() => {
-    const qs = pickN(pool, ROUND_SIZE)
-    setItems(qs)
-    setIndex(0)
-    setScore(0)
-    setLives(LIVES)
-    setSelected(null)
-    setFeedback('idle')
-    setFinished(false)
-    setXpAwarded(0)
-    setRoundKey((k) => k + 1)
-  }, [pool])
-
-  useEffect(() => {
-    startRound()
-  }, [startRound])
+  const startRound = useCallback(
+    (nextMode: RoundMode = mode) => {
+      const size = ROUND_SIZES[nextMode]
+      const qs = pickN(pool, size)
+      setMode(nextMode)
+      setItems(qs)
+      setIndex(0)
+      setScore(0)
+      setLives(LIVES)
+      setSelected(null)
+      setFeedback('idle')
+      setFinished(false)
+      setXpAwarded(0)
+      setStarted(true)
+      setRoundKey((k) => k + 1)
+    },
+    [pool, mode],
+  )
 
   const current = items[index]
 
-  // Auto-speak when question changes (user-gesture may be needed on iOS —
-  // also offer big replay button)
+  // Auto-speak Slovak only when question changes
   useEffect(() => {
-    if (!current || finished) return
-    // Slight delay so UI paints first
+    if (!started || !current || finished) return
     const t = window.setTimeout(() => speakSlovak(current.sk), 280)
     return () => window.clearTimeout(t)
-  }, [current, finished, roundKey, index])
+  }, [current, finished, roundKey, index, started])
 
   const options = useMemo(() => {
     if (!current) return []
@@ -71,11 +86,13 @@ export function TapWhatYouHear({ onExit }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current, pool, roundKey, index])
 
-  const finish = (finalScore: number) => {
-    const xp = Math.min(18, 5 + finalScore * 2)
+  const finish = (finalScore: number, total: number) => {
+    const bonus = mode === 'long' ? 4 : mode === 'standard' ? 2 : 0
+    const xp = Math.min(24, 5 + finalScore * 2 + bonus)
     earnXp(xp)
     setXpAwarded(xp)
     setFinished(true)
+    void total
   }
 
   const pick = (optIndex: number) => {
@@ -90,11 +107,11 @@ export function TapWhatYouHear({ onExit }: Props) {
 
     window.setTimeout(() => {
       if (!correct && nextLives <= 0) {
-        finish(nextScore)
+        finish(nextScore, items.length)
         return
       }
       if (index >= items.length - 1) {
-        finish(nextScore)
+        finish(nextScore, items.length)
         return
       }
       setIndex((i) => i + 1)
@@ -109,13 +126,59 @@ export function TapWhatYouHear({ onExit }: Props) {
       <GameResult
         title={won ? 'Sharp ears!' : 'Listen again'}
         subtitle={won ? 'Počúvam ťa — great listening!' : 'Replay the audio and try once more.'}
-        scoreLabel={`${score}/${items.length} correct`}
+        scoreLabel={`${score}/${items.length} correct · ${MODE_LABELS[mode]}`}
         xpEarned={xpAwarded}
         won={won}
         emoji={won ? '👂' : '🔊'}
-        onPlayAgain={startRound}
+        onPlayAgain={() => startRound(mode)}
         onBack={onExit}
       />
+    )
+  }
+
+  if (!started) {
+    return (
+      <div className="mx-auto flex min-h-full max-w-lg flex-col px-4 pb-28 pt-4">
+        <button
+          type="button"
+          onClick={onExit}
+          className="self-start rounded-xl px-3 py-2 text-sm font-bold text-slate-400 hover:text-white"
+        >
+          ← Back
+        </button>
+        <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-slovo-green-light/80">
+          Tap what you hear
+        </p>
+        <h2 className="mt-1 text-2xl font-black text-white">Listen & pick the meaning</h2>
+        <p className="mt-2 text-sm text-slate-400">
+          Slovak TTS only. Pick a round length — longer rounds earn a small XP bonus.
+        </p>
+        <p className="mt-1 text-xs font-semibold text-slate-500">
+          Vocab pool: {pool.length} phrases
+        </p>
+
+        <div className="mt-8 flex flex-col gap-3">
+          {(Object.keys(ROUND_SIZES) as RoundMode[]).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => startRound(m)}
+              className={`rounded-2xl border-2 px-4 py-4 text-left transition active:scale-[0.98] ${
+                m === 'long'
+                  ? 'border-slovo-green/60 bg-slovo-green/15'
+                  : 'border-slate-600 bg-slate-800 hover:border-slate-500'
+              }`}
+            >
+              <div className="text-lg font-extrabold text-white">{MODE_LABELS[m]}</div>
+              <div className="mt-1 text-sm text-slate-400">
+                {m === 'quick' && 'Warm-up listening'}
+                {m === 'standard' && 'Solid practice round'}
+                {m === 'long' && 'Extended ear workout · +XP'}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
     )
   }
 
@@ -138,6 +201,7 @@ export function TapWhatYouHear({ onExit }: Props) {
           ← Back
         </button>
         <div className="flex items-center gap-3 text-sm font-bold">
+          <span className="text-slate-500">{MODE_LABELS[mode]}</span>
           <span className="text-slovo-gold">★ {score}</span>
           <span className="text-slovo-heart">{'❤️'.repeat(Math.max(0, lives))}</span>
         </div>

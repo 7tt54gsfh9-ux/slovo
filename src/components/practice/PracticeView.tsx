@@ -46,7 +46,7 @@ const GAMES: GameCard[] = [
   {
     id: 'listen',
     name: 'Tap what you hear',
-    blurb: 'Listen to Slovak TTS and tap the meaning.',
+    blurb: 'Listen to Slovak TTS — quick, standard, or long rounds.',
     emoji: '👂',
     accent: 'border-slovo-green/50 bg-green-950/30',
     Icon: Ear,
